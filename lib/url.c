@@ -722,7 +722,7 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
   switch(option) {
   case CURLOPT_DNS_CACHE_TIMEOUT:
     arg = va_arg(param, long);
-    if(arg < 0)
+    if(arg < -1)
       return CURLE_BAD_FUNCTION_ARGUMENT;
     data->set.dns_cache_timeout = arg;
     break;
@@ -1043,7 +1043,7 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
      * headers. This should mostly be used to detect never-ending loops.
      */
     arg = va_arg(param, long);
-    if(arg < 0)
+    if(arg < -1)
       return CURLE_BAD_FUNCTION_ARGUMENT;
     data->set.maxredirs = arg;
     break;
@@ -1143,7 +1143,7 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
      * figure it out. Enables binary posts.
      */
     bigsize = va_arg(param, long);
-    if(bigsize < 0)
+    if(bigsize < -1)
       return CURLE_BAD_FUNCTION_ARGUMENT;
 
     if(data->set.postfieldsize < bigsize &&
@@ -1162,6 +1162,8 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
      * figure it out. Enables binary posts.
      */
     bigsize = va_arg(param, curl_off_t);
+    if(bigsize < -1)
+      return CURLE_BAD_FUNCTION_ARGUMENT;
 
     if(data->set.postfieldsize < bigsize &&
        data->set.postfields == data->set.str[STRING_COPYPOSTFIELDS]) {
